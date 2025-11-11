@@ -2,9 +2,28 @@
 from rest_framework import serializers
 from ..models import User
 
-# ---------- 1. Send OTP Serializer (Register or Login) ----------
+# # ---------- 1. Send OTP Serializer (Register or Login) ----------
+# class SendOTPSerializer(serializers.Serializer):
+#     phone = serializers.CharField(max_length=15)
+
+
+
 class SendOTPSerializer(serializers.Serializer):
-    phone = serializers.CharField(max_length=15)
+    phone = serializers.CharField(max_length=10) # Max length 
+
+    def validate_phone(self, value):
+        phone_number = value.replace(' ', '').replace('-', '')
+
+        if not (10 <= len(phone_number) <= 15):
+             raise serializers.ValidationError("Phone number length is invalid.")
+
+        if not phone_number.isdigit() and not phone_number.startswith('+'):
+            raise serializers.ValidationError("Phone number must contain only digits (and optionally a leading '+').")
+        
+        if len(set(phone_number)) < 3:
+            raise serializers.ValidationError("Please provide a valid phone number.")
+
+        return phone_number 
 
 # ---------- 2. Verify OTP Serializer ----------
 class VerifyOTPSerializer(serializers.Serializer):

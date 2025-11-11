@@ -31,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     #  In AbstractUser default fields again defien
     
     # Required for Mobile OTP Login
-    phone = models.CharField(max_length=15, unique=True)
+    phone = models.CharField(max_length=10, unique=True)
     otp = models.CharField(max_length=6, blank=True, null=True) 
 
     # Full Name Fields ( from AbstractUser we can define again)
